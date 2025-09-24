@@ -5,22 +5,22 @@ import { UseClickOutside } from '../hooks/UseClickOutside';
 interface DropdownMenuProps {
   label: string;
   options: string[];
+  value: string;
   onSelect: (value: string) => void;
 }
 
 export default function DropdownMenu({
   label,
   options = [],
+  value,
   onSelect,
 }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
   UseClickOutside(ref, () => setIsOpen(false));
 
   const handleSelect = (value: string) => {
-    setSelected(value);
     onSelect(value);
     setIsOpen(false);
   };
@@ -28,7 +28,7 @@ export default function DropdownMenu({
   return (
     <div ref={ref} className='relative inline-block'>
       <Button variant='tertiary' onClick={() => setIsOpen((prev) => !prev)}>
-        {selected ? `Filter ${label}: ${selected}` : `Filter ${label}`}
+        {value ? `Filter ${label}: ${value}` : `Filter ${label}`}
       </Button>
 
       <div
