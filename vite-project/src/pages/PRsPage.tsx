@@ -4,7 +4,6 @@ import { PRData } from '../types';
 
 import SectionHeader from '../components/SectionHeader';
 import Tabs from '../components/Tabs';
-import Filters from '../components/Filters';
 
 export default function PRsPage() {
   const [prs, setPrs] = useState<PRData[]>([]);
@@ -32,22 +31,28 @@ export default function PRsPage() {
   ];
 
   console.log(reviewerOptions);
+
+  const handleClearFilters = () => {
+    setAuthor('');
+    setReviewer('');
+  };
+
+  // TODO: add breadcrumb logic here
+
   return (
     <main className='bg-bg-main h-screen p-3 md:p8 lg:px-14 lg:py-11 flex flex-col gap-4 lg:gap-10'>
       <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
       <SectionHeader
         activeTab={activeTab}
-        onSave={() => console.log('Save JSON')}
-        onRefresh={() => console.log('Refresh')}
-      />
-      <Filters
         author={author}
         reviewer={reviewer}
         authorOptions={authorOptions}
         reviewerOptions={reviewerOptions}
-        onAuthorChange={(val) => setAuthor(val === 'All' ? '' : val)}
-        onReviewerChange={(val) => setReviewer(val === 'All' ? '' : val)}
-        onSearch={() => console.log('Search clicked!')}
+        onAuthorChange={setAuthor}
+        onReviewerChange={setReviewer}
+        onSave={() => console.log('Saved JSON')}
+        onRefresh={() => console.log('Refreshed')}
+        onClear={handleClearFilters}
       />
     </main>
   );

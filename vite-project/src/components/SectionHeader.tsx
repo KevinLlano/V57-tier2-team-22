@@ -1,14 +1,42 @@
 import { useState } from 'react';
 import Button from './Button';
 import Toast from './Toast';
+import Filters from './Filters';
+import Breadcrumbs from './Breadcrumbs';
 
 type SectionHeaderProps = {
   activeTab: 'open' | 'closed';
+  author: string;
+  reviewer: string;
+  authorOptions: string[];
+  reviewerOptions: string[];
+  onAuthorChange: (value: string) => void; // passing setAuthor w/c is a string as argument so need to type that
+  onReviewerChange: (value: string) => void;
   onSave: () => void;
   onRefresh: () => void;
+  onClear: () => void;
+  user: string;
+  userUrl: string;
+  repo: string;
+  repoUrl: string;
 };
 
-export default function SectionHeader({ activeTab }: SectionHeaderProps) {
+export default function SectionHeader({
+  activeTab,
+  author,
+  reviewer,
+  authorOptions,
+  reviewerOptions,
+  onAuthorChange,
+  onReviewerChange,
+  onSave,
+  onRefresh,
+  onClear,
+  user,
+  userUrl,
+  repo,
+  repoUrl,
+}: SectionHeaderProps) {
   const [toast, setToast] = useState<string | null>(null);
   const showToast = (msg: string) => {
     setToast(msg);
@@ -17,16 +45,19 @@ export default function SectionHeader({ activeTab }: SectionHeaderProps) {
 
   return (
     <div className='bg-white rounded-2xl flex flex-col p-5 md:p-7 gap-3 border-b border-grey-secondary'>
+      <Breadcrumbs
+        user={user}
+        userUrl={userUrl}
+        repo={repo}
+        repoUrl={repoUrl}
+      />
       <h1 className='font-bold text-xl mb-3.5 md:text-3xl '>
         {' '}
         {activeTab === 'open' ? 'Open PRs' : 'Closed PRs'}
       </h1>
       <div className='flex gap-5'>
         <div>
-          <Button
-            variant='secondary'
-            onClick={() => showToast('JSON saved successfully!')}
-          >
+          <Button variant='secondary' onClick={onSave}>
             SAVE JSON
           </Button>
         </div>
@@ -41,6 +72,15 @@ export default function SectionHeader({ activeTab }: SectionHeaderProps) {
       </div>
 
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+      <Filters
+        author={author}
+        reviewer={reviewer}
+        authorOptions={authorOptions}
+        reviewerOptions={reviewerOptions}
+        onAuthorChange={onAuthorChange}
+        onReviewerChange={onReviewerChange}
+        onClear={onClear}
+      />
     </div>
   );
 }

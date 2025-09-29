@@ -1,3 +1,6 @@
+// TODO: add reset button to clear filters
+// TODO:
+
 import DropdownMenu from './DropdownMenu';
 import Button from './Button';
 
@@ -8,7 +11,7 @@ type FiltersProps = {
   reviewerOptions: string[];
   onAuthorChange: (val: string) => void;
   onReviewerChange: (val: string) => void;
-  onSearch: () => void;
+  onClear: () => void;
 };
 
 export default function Filters({
@@ -18,7 +21,7 @@ export default function Filters({
   reviewerOptions,
   onAuthorChange,
   onReviewerChange,
-  onSearch,
+  onClear,
 }: FiltersProps) {
   return (
     <div className='flex flex-col gap-2 md:flex-row md:gap-5'>
@@ -35,7 +38,7 @@ export default function Filters({
         onSelect={onReviewerChange}
       />
       <div className='mt-3 md:mt-0'>
-        <Button onClick={onSearch}>Search</Button>
+        <Button onClick={onClear}>Clear Filters</Button>
       </div>
       {/* TODO: for debugging display, remove later */}
       <div className='text-sm text-error self-center flex-1'>
