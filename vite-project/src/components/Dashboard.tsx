@@ -1,10 +1,19 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import exampleData from "./exampledata";
+import prData from "../data/mockData.json";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { formatDate } from "../utils/formatDate";
+
+interface Props {
+  date: string;
+}
 
 const PRDashboard: React.FC = () => {
-  const [prs, setPrs] = useState(exampleData);
+  const items: Item[] = prData;
+
+  console.log(items);
+
+  const [prs, setPrs] = useState(items);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -42,15 +51,27 @@ const PRDashboard: React.FC = () => {
           </thead>
           <tbody>
             {currentItems.map((pr) => (
-              <tr key={pr.id} style={trStyle}>
-                <td style={tdStyleId}>{pr.id}</td>
-                <td style={tdStyleTitle}>{pr.title}</td>
-                <td style={tdStyleAuthor}>{pr.authorImg + " " + pr.author}</td>
-                <td style={tdStyleCreated}>{pr.created}</td>
-                <td style={tdStyleReviewers}>
-                  {pr.reviewersImg + " " + pr.reviewers}
+              <tr key={pr.number} style={trStyle}>
+                <td style={tdStyleId}>{pr.number}</td>
+                <td style={tdStyleTitle}>
+                  <a href={pr.url}>{pr.title}</a>
                 </td>
-                <td style={tdStyleDate}>{pr.date}</td>
+                <td style={tdStyleAuthor}>
+                  <div className="flex items-center">
+                    <img src={pr.author.avatar} className="h-10 rounded-4xl" />
+                    <p className="ml-2">{pr.author.username}</p>
+                  </div>
+                </td>
+                <td style={tdStyleCreated}>{formatDate(pr.createdAt)}</td>
+                <td style={tdStyleReviewers}>
+                  {pr.reviewers.map((i) => (
+                    <div className="flex items-center p-2">
+                      <img src={i.avatar} className="h-10 rounded-4xl" />
+                      <p className="ml-2">{i.username}</p>
+                    </div>
+                  ))}
+                </td>
+                <td style={tdStyleDate}>{formatDate(pr.lastActionDate)}</td>
                 <td style={tdStyleArrow}>
                   <ChevronRightIcon className="hover:cursor-pointer" />
                 </td>
@@ -99,6 +120,7 @@ const thStyleTitle: React.CSSProperties = {
   backgroundColor: "#F9FAFB",
 };
 const thStyleAuthor: React.CSSProperties = {
+  display: "flex",
   textAlign: "left",
   height: "50px",
   width: "12vw",
