@@ -7,7 +7,7 @@ const HomePage: React.FC = () => {
     <div className="bg-[#f4f5f3] flex flex-col">
 
       {/* Hero - white - main page */}
-  <section className="min-h-[83vh] bg-white flex items-center">
+  <section className="min-h-[95vh] bg-white flex items-center">
         <div className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-12 items-center w-full">
           <div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-black">
@@ -32,7 +32,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* scroll down button */}
-      <div className="w-full flex justify-center mt-4 mb-8">
+      {/* <div className="w-full flex justify-center mt-4 mb-8">
         <button
           aria-label="Scroll to bottom"
           onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
@@ -43,10 +43,10 @@ const HomePage: React.FC = () => {
           </svg>
           <span>Scroll</span>
         </button>
-      </div>
+      </div> */}
 
   {/* Green feature bg - full second page  */}
-  <section className="min-h-[calc(100vh-14rem)] bg-[#134b47] text-black/90 flex items-start">
+  <section className="min-h-[calc(100vh-22rem)] bg-[#134b47] text-black/90 flex items-start">
          <div className="max-w-6xl mx-auto px-6 py-20 w-full">
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
              <article className="bg-white rounded-2xl p-8 shadow-lg flex flex-col items-start justify-start  h-72">
@@ -69,9 +69,9 @@ const HomePage: React.FC = () => {
        </section>
 
       {/* floating chat button */}
-      <button aria-label="chat" className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-white shadow grid place-items-center border">
+      {/* <button aria-label="chat" className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-white shadow grid place-items-center border">
         💬
-      </button>
+      </button> */}
     </div>
   )
 }

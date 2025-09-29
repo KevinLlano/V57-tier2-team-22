@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-600 hidden sm:inline" aria-label={`Today is ${today}`}>{today}</span>
-            <button className="text-xs text-white bg-[#0f7a6e] hover:bg-[#0d665c] px-3 py-1 rounded-full">login →</button>
+            {/* <button className="text-xs text-white bg-[#0f7a6e] hover:bg-[#0d665c] px-3 py-1 rounded-full">login →</button> */}
           </div>
         </div>
       </div>
