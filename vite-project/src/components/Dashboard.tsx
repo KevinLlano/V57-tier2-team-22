@@ -1,25 +1,57 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import prData from "../data/mockData.json";
+// import prData from "../data/mockData.json"; // replaced by live GitHub data
+import { fetchMappedPullRequests } from "../utils/githubApi";
+import { PullRequest } from "../types";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { formatDate } from "../utils/formatDate";
 
-interface Props {
-  date: string;
+
+interface DashboardProps {
+  owner: string;
+  repo: string;
 }
 
-const PRDashboard: React.FC = () => {
-  const items: Item[] = prData;
+// Dashboard component to display Owner/Repo PRs
+const PRDashboard: React.FC<DashboardProps> = ({ owner, repo }) => {
+  const [prs, setPrs] = useState<PullRequest[]>([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState<string | null>(null); 
 
-  console.log(items);
 
-  const [prs, setPrs] = useState(items);
-  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchMappedPullRequests(owner, repo);
+        if (!cancelled) setPrs(data);
+      } catch (e: any) {
+        if (!cancelled) setError(e.message || 'Failed to load PRs');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [owner, repo]);
+  // Provide PR data for export when SectionHeader dispatches request
+  useEffect(() => {
+    const handler = (e: any) => {
+      const detail = prs;
+      const replyEventName = e.detail?.replyEvent || 'provide-pr-data';
+      const reply = new CustomEvent(replyEventName, { detail });
+      window.dispatchEvent(reply);
+    };
+    window.addEventListener('request-pr-data', handler);
+    return () => window.removeEventListener('request-pr-data', handler);
+  }, [prs]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const ITEMS_PER_PAGE = 8;
 
-  const totalPages = Math.ceil(prs.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(prs.length / ITEMS_PER_PAGE) || 1;
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentItems = prs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -31,6 +63,9 @@ const PRDashboard: React.FC = () => {
   return (
     <div className="flex flex-col items-center bg-[#f5f5f4]">
       <div style={{ width: "70vw" }}>
+        <div className="flex justify-end items-center gap-4 my-4">
+        </div>
+        
         <table
           style={{
             width: "100%",
@@ -46,11 +81,18 @@ const PRDashboard: React.FC = () => {
               <th style={thStyleCreated}>CREATED</th>
               <th style={thStyleReviewers}>REVIEWERS</th>
               <th style={thStyleDate}>LAST ACTION DATE</th>
-              <th style={thStyleArrow}></th>
+              <th style={thStyleArrow}></th> 
+              <th style={thStyleLastAction}>LAST ACTION</th> 
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((pr) => (
+            {loading && (
+              <tr><td colSpan={7} style={{ padding: 20 }}>Loading PRs...</td></tr>
+            )}
+            {error && !loading && (
+              <tr><td colSpan={7} style={{ padding: 20, color: 'red' }}>{error}</td></tr>
+            )}
+            {!loading && !error && currentItems.map((pr) => (
               <tr key={pr.number} style={trStyle}>
                 <td style={tdStyleId}>{pr.number}</td>
                 <td style={tdStyleTitle}>
@@ -74,6 +116,9 @@ const PRDashboard: React.FC = () => {
                 <td style={tdStyleDate}>{formatDate(pr.lastActionDate)}</td>
                 <td style={tdStyleArrow}>
                   <ChevronRightIcon className="hover:cursor-pointer" />
+                </td>
+                <td style={tdStyleLastAction}>
+                  {renderLastActionBadge(pr.lastActionType)}
                 </td>
               </tr>
             ))}
@@ -172,6 +217,17 @@ const thStyleArrow: React.CSSProperties = {
   backgroundColor: "#F9FAFB",
 };
 
+const thStyleLastAction: React.CSSProperties = {
+  textAlign: "left",
+  height: "50px",
+  width: "10vw",
+  padding: "10px",
+  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
+  color: "#7B818E",
+  fontWeight: "600",
+  backgroundColor: "#F9FAFB",
+};
+
 const tdStyleId: React.CSSProperties = {
   height: "70px",
   width: "5vw",
@@ -249,10 +305,41 @@ const tdStyleArrow: React.CSSProperties = {
   fontWeight: "600",
 };
 
+const tdStyleLastAction: React.CSSProperties = {
+  height: "50px",
+  width: "10vw",
+  textAlign: "left",
+  borderBottom: "2px solid #eee",
+  color: "#121827",
+  padding: "10px",
+  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
+  fontWeight: 500,
+};
+
 const trStyle: React.CSSProperties = {
   height: "",
   backgroundColor: "white",
   fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
 };
+
+function renderLastActionBadge(type?: string) {
+  if (!type) return null;
+  const base: React.CSSProperties = {
+    display: 'inline-block',
+    fontSize: 12,
+    lineHeight: '16px',
+    padding: '2px 8px',
+    borderRadius: 8,
+    fontWeight: 600,
+  };
+  const styleMap: Record<string, React.CSSProperties> = {
+    Created: { background: '#E8F2FF', color: '#0B57D0' },
+    Draft: { background: '#F3E8FF', color: '#6B21A8' },
+    Merged: { background: '#E6F4EA', color: '#1E7F37' },
+    Closed: { background: '#FEE2E2', color: '#B91C1C' },
+  };
+  const style = { ...base, ...(styleMap[type] || { background: '#E2E8F0', color: '#334155' }) };
+  return <span style={style}>{type}</span>;
+}
 
 export default PRDashboard;
