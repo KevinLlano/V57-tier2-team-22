@@ -37,8 +37,6 @@ export default function PRsPage() {
     setReviewer('');
   };
 
-  // TODO: add breadcrumb logic here
-
   return (
     <main className='bg-bg-main h-screen p-3 md:p8 lg:px-14 lg:py-11 flex flex-col gap-4 lg:gap-10'>
       <Tabs activeTab={activeTab} onTabChange={setActiveTab} />

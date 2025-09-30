@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Button from './Button';
 import Toast from './Toast';
 import Filters from './Filters';
-import Breadcrumbs from './Breadcrumbs';
 
 type SectionHeaderProps = {
   activeTab: 'open' | 'closed';
@@ -15,10 +14,6 @@ type SectionHeaderProps = {
   onSave: () => void;
   onRefresh: () => void;
   onClear: () => void;
-  user: string;
-  userUrl: string;
-  repo: string;
-  repoUrl: string;
 };
 
 export default function SectionHeader({
@@ -32,10 +27,6 @@ export default function SectionHeader({
   onSave,
   onRefresh,
   onClear,
-  user,
-  userUrl,
-  repo,
-  repoUrl,
 }: SectionHeaderProps) {
   const [toast, setToast] = useState<string | null>(null);
   const showToast = (msg: string) => {
@@ -45,12 +36,6 @@ export default function SectionHeader({
 
   return (
     <div className='bg-white rounded-2xl flex flex-col p-5 md:p-7 gap-3 border-b border-grey-secondary'>
-      <Breadcrumbs
-        user={user}
-        userUrl={userUrl}
-        repo={repo}
-        repoUrl={repoUrl}
-      />
       <h1 className='font-bold text-xl mb-3.5 md:text-3xl '>
         {' '}
         {activeTab === 'open' ? 'Open PRs' : 'Closed PRs'}
