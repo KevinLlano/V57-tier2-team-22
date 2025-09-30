@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import prData from "../data/mockData.json";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { formatDate } from "../utils/formatDate";
 
 interface Props {
@@ -16,6 +17,12 @@ const PRDashboard: React.FC = () => {
   const [prs, setPrs] = useState(items);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [titleAsc, setTitleAsc] = useState(true);
+  const [authorAsc, setAuthorAsc] = useState(true);
+  const [numAsc, setNumAsc] = useState(true);
+  const [dateAsc, setDateAsc] = useState(true);
+  const [selectedPR, setSelectedPR] = useState({ number: 0 });
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const ITEMS_PER_PAGE = 8;
 
@@ -26,6 +33,55 @@ const PRDashboard: React.FC = () => {
 
   const handleClick = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedNumber = Number(e);
+    const pr = prs.find((item) => item.number === selectedNumber) || null;
+    setSelectedPR(pr);
+    setDropdownOpen(false); // reset dropdown on selection change
+  };
+
+  console.log(selectedPR.number);
+
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
+
+  const sortById = () => {
+    const sorted = [...prs].sort((a, b) =>
+      numAsc ? a.number - b.number : b.number - a.number
+    );
+    setPrs(sorted);
+    setNumAsc(!numAsc);
+  };
+
+  const sortByTitle = () => {
+    const sorted = [...prs].sort((a, b) =>
+      titleAsc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
+    );
+    setPrs(sorted);
+    setTitleAsc(!titleAsc);
+  };
+
+  const sortByAuthor = () => {
+    const sorted = [...prs].sort((a, b) =>
+      authorAsc
+        ? a.author.username.localeCompare(b.author.username)
+        : b.author.username.localeCompare(a.author.username)
+    );
+    setPrs(sorted);
+    setAuthorAsc(!authorAsc);
+  };
+
+  const sortByDate = () => {
+    const sorted = [...prs].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return dateAsc ? dateB - dateA : dateA - dateB;
+    });
+    setPrs(sorted);
+    setDateAsc(!dateAsc);
   };
 
   return (
@@ -40,10 +96,38 @@ const PRDashboard: React.FC = () => {
         >
           <thead>
             <tr>
-              <th style={thStyleId}>#</th>
-              <th style={thStyleTitle}>TITLE</th>
-              <th style={thStyleAuthor}>AUTHOR</th>
-              <th style={thStyleCreated}>CREATED</th>
+              <th
+                style={thStyleId}
+                onClick={() => {
+                  sortById();
+                }}
+              >
+                #
+              </th>
+              <th
+                style={thStyleTitle}
+                onClick={() => {
+                  sortByTitle();
+                }}
+              >
+                TITLE
+              </th>
+              <th
+                style={thStyleAuthor}
+                onClick={() => {
+                  sortByAuthor();
+                }}
+              >
+                AUTHOR
+              </th>
+              <th
+                style={thStyleCreated}
+                onClick={() => {
+                  sortByDate();
+                }}
+              >
+                CREATED
+              </th>
               <th style={thStyleReviewers}>REVIEWERS</th>
               <th style={thStyleDate}>LAST ACTION DATE</th>
               <th style={thStyleArrow}></th>
@@ -54,22 +138,59 @@ const PRDashboard: React.FC = () => {
               <tr key={pr.number} style={trStyle}>
                 <td style={tdStyleId}>{pr.number}</td>
                 <td style={tdStyleTitle}>
-                  <a href={pr.url}>{pr.title}</a>
+                  <a href={pr.url} className="hover:underline">
+                    {pr.title}
+                  </a>
                 </td>
                 <td style={tdStyleAuthor}>
-                  <div className="flex items-center">
+                  <a
+                    className="flex items-center"
+                    href={`https://github.com/${pr.author.username}`}
+                  >
                     <img src={pr.author.avatar} className="h-10 rounded-4xl" />
-                    <p className="ml-2">{pr.author.username}</p>
-                  </div>
+                    <p className="ml-2 hover:underline">{pr.author.username}</p>
+                  </a>
                 </td>
                 <td style={tdStyleCreated}>{formatDate(pr.createdAt)}</td>
                 <td style={tdStyleReviewers}>
-                  {pr.reviewers.map((i) => (
-                    <div className="flex items-center p-2">
-                      <img src={i.avatar} className="h-10 rounded-4xl" />
-                      <p className="ml-2">{i.username}</p>
+                  <div className="relative flex mb-14">
+                    <div className="absolute bg-white rounded-md hover:cursor-pointer">
+                      {pr.number === selectedPR.number
+                        ? pr.reviewers.map((i) => (
+                            <div
+                              key={pr.number}
+                              onClick={() => {
+                                handleSelectChange(pr.number);
+                              }}
+                              className="flex items-center p-2"
+                            >
+                              <img
+                                src={i.avatar}
+                                className="h-10 rounded-4xl"
+                              />
+                              <p className="ml-2">{i.username}</p>
+                            </div>
+                          ))
+                        : pr.reviewers.slice(0, 1).map((i) => (
+                            <div
+                              key={pr.number}
+                              onClick={() => {
+                                handleSelectChange(pr.number);
+                              }}
+                              className="flex items-center p-2"
+                            >
+                              <img
+                                src={i.avatar}
+                                className="h-10 rounded-4xl"
+                              />
+                              <p className="ml-2">{i.username}</p>
+                              {pr.reviewers.length > 1 ? (
+                                <ExpandMoreIcon />
+                              ) : null}
+                            </div>
+                          ))}
                     </div>
-                  ))}
+                  </div>
                 </td>
                 <td style={tdStyleDate}>{formatDate(pr.lastActionDate)}</td>
                 <td style={tdStyleArrow}>
@@ -108,6 +229,7 @@ const thStyleId: React.CSSProperties = {
   color: "#7B818E",
   fontWeight: "600",
   backgroundColor: "#F9FAFB",
+  cursor: "pointer",
 };
 const thStyleTitle: React.CSSProperties = {
   textAlign: "left",
@@ -118,6 +240,7 @@ const thStyleTitle: React.CSSProperties = {
   color: "#7B818E",
   fontWeight: "600",
   backgroundColor: "#F9FAFB",
+  cursor: "pointer",
 };
 const thStyleAuthor: React.CSSProperties = {
   display: "flex",
@@ -129,6 +252,7 @@ const thStyleAuthor: React.CSSProperties = {
   color: "#7B818E",
   fontWeight: "600",
   backgroundColor: "#F9FAFB",
+  cursor: "pointer",
 };
 const thStyleCreated: React.CSSProperties = {
   textAlign: "left",
@@ -139,6 +263,7 @@ const thStyleCreated: React.CSSProperties = {
   color: "#7B818E",
   fontWeight: "600",
   backgroundColor: "#F9FAFB",
+  cursor: "pointer",
 };
 const thStyleReviewers: React.CSSProperties = {
   textAlign: "left",
