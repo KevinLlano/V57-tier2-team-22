@@ -35,9 +35,9 @@ export default function PRsPage() {
   };
 
   // REAL TIME RELOAD ON OWNER/REPO CHANGE
-  useEffect(() => {
-    loadPRs();
-  }, [owner, repo]);
+  // useEffect(() => {
+  //   loadPRs();
+  // }, [owner, repo]);
 
   // Generate filter options from loaded PRs
   const authorOptions = [
