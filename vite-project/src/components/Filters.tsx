@@ -1,6 +1,3 @@
-// TODO: add reset button to clear filters
-// TODO:
-
 import DropdownMenu from './DropdownMenu';
 import Button from './Button';
 
@@ -24,7 +21,7 @@ export default function Filters({
   onClear,
 }: FiltersProps) {
   return (
-    <div className='flex flex-col gap-2 md:flex-row md:gap-5'>
+    <>
       <DropdownMenu
         label='Author'
         options={authorOptions}
@@ -37,13 +34,13 @@ export default function Filters({
         value={reviewer}
         onSelect={onReviewerChange}
       />
-      <div className='mt-3 md:mt-0'>
+      <div className='mt-1 md:mt-0'>
         <Button onClick={onClear}>Clear Filters</Button>
       </div>
-      {/* TODO: for debugging display, remove later */}
-      <div className='text-sm text-error self-center flex-1'>
+      {/* Status line */}
+      <div className="text-sm text-error self-center flex-1 min-w-[220px]">
         Active → Author: {author || 'All'}, Reviewer: {reviewer || 'All'}
       </div>
-    </div>
+    </>
   );
 }

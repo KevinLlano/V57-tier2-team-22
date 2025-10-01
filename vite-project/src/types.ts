@@ -13,6 +13,7 @@ export interface PRData {
     avatar: string;
   }[];
   lastActionDate: string;
+  lastActionType: string;
 }
 
-const mockData = rawData as PRData[];
+// Removed unused mockData

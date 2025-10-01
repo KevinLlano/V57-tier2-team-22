@@ -1,383 +1,204 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import prData from "../data/mockData.json";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import React, { useState } from "react";
+import { PRData } from "../types";
 import { formatDate } from "../utils/formatDate";
 
-interface Props {
-  date: string;
+interface DashboardProps {
+  prs: PRData[];
+  loading: boolean;
 }
 
-const PRDashboard: React.FC = () => {
-  const items: Item[] = prData;
-
-  console.log(items);
-
-  const [prs, setPrs] = useState(items);
-  const [loading, setLoading] = useState(true);
+const PRDashboard: React.FC<DashboardProps> = ({ prs, loading }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [titleAsc, setTitleAsc] = useState(true);
-  const [authorAsc, setAuthorAsc] = useState(true);
-  const [numAsc, setNumAsc] = useState(true);
-  const [dateAsc, setDateAsc] = useState(true);
-  const [selectedPR, setSelectedPR] = useState({ number: 0 });
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const ITEMS_PER_PAGE = 8;
-
-  const totalPages = Math.ceil(prs.length / ITEMS_PER_PAGE);
-
+  const ITEMS_PER_PAGE = 10;
+  
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const totalPages = Math.ceil(prs.length / ITEMS_PER_PAGE) || 1;
   const currentItems = prs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const handleClick = (page: number) => {
+  const handlePageClick = (page: number) => {
     setCurrentPage(page);
   };
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedNumber = Number(e);
-    const pr = prs.find((item) => item.number === selectedNumber) || null;
-    setSelectedPR(pr);
-    setDropdownOpen(false); // reset dropdown on selection change
-  };
-
-  console.log(selectedPR.number);
-
-  const toggleDropdown = () => {
-    setDropdownOpen((prev) => !prev);
-  };
-
-  const sortById = () => {
-    const sorted = [...prs].sort((a, b) =>
-      numAsc ? a.number - b.number : b.number - a.number
+  const renderLastActionBadge = (lastActionDate: string) => {
+    return (
+      <span className="inline-block px-2 py-1 text-xs font-semibold text-white bg-blue-500 rounded-full">
+        {formatDate(lastActionDate)}
+      </span>
     );
-    setPrs(sorted);
-    setNumAsc(!numAsc);
   };
 
-  const sortByTitle = () => {
-    const sorted = [...prs].sort((a, b) =>
-      titleAsc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center bg-[#f5f5f4] p-8">
+        <div className="text-center">Loading PRs...</div>
+      </div>
     );
-    setPrs(sorted);
-    setTitleAsc(!titleAsc);
-  };
-
-  const sortByAuthor = () => {
-    const sorted = [...prs].sort((a, b) =>
-      authorAsc
-        ? a.author.username.localeCompare(b.author.username)
-        : b.author.username.localeCompare(a.author.username)
-    );
-    setPrs(sorted);
-    setAuthorAsc(!authorAsc);
-  };
-
-  const sortByDate = () => {
-    const sorted = [...prs].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return dateAsc ? dateB - dateA : dateA - dateB;
-    });
-    setPrs(sorted);
-    setDateAsc(!dateAsc);
-  };
+  }
 
   return (
     <div className="flex flex-col items-center bg-[#f5f5f4]">
-      <div style={{ width: "70vw" }}>
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            border: "solid 1px lightgray",
-          }}
-        >
-          <thead>
+      <div className="overflow-x-auto border border-gray-300 rounded-lg shadow-md bg-white w-full max-w-7xl">
+        <table className="min-w-full bg-white">
+          <thead className="bg-gray-100">
             <tr>
-              <th
-                style={thStyleId}
-                onClick={() => {
-                  sortById();
-                }}
-              >
-                #
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                ID
               </th>
-              <th
-                style={thStyleTitle}
-                onClick={() => {
-                  sortByTitle();
-                }}
-              >
-                TITLE
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Title
               </th>
-              <th
-                style={thStyleAuthor}
-                onClick={() => {
-                  sortByAuthor();
-                }}
-              >
-                AUTHOR
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Author
               </th>
-              <th
-                style={thStyleCreated}
-                onClick={() => {
-                  sortByDate();
-                }}
-              >
-                CREATED
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Created Date
               </th>
-              <th style={thStyleReviewers}>REVIEWERS</th>
-              <th style={thStyleDate}>LAST ACTION DATE</th>
-              <th style={thStyleArrow}></th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Reviewers
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Last Action Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Last Action
+              </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-gray-200">
             {currentItems.map((pr) => (
-              <tr key={pr.number} style={trStyle}>
-                <td style={tdStyleId}>{pr.number}</td>
-                <td style={tdStyleTitle}>
-                  <a href={pr.url} className="hover:underline">
+              <tr key={pr.number} className="hover:bg-gray-50">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <a
+                    href={pr.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    #{pr.number}
+                  </a>
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-900">
+                  <a
+                    href={pr.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
                     {pr.title}
                   </a>
                 </td>
-                <td style={tdStyleAuthor}>
-                  <a
-                    className="flex items-center"
-                    href={`https://github.com/${pr.author.username}`}
-                  >
-                    <img src={pr.author.avatar} className="h-10 rounded-4xl" />
-                    <p className="ml-2 hover:underline">{pr.author.username}</p>
-                  </a>
-                </td>
-                <td style={tdStyleCreated}>{formatDate(pr.createdAt)}</td>
-                <td style={tdStyleReviewers}>
-                  <div className="relative flex mb-14">
-                    <div className="absolute bg-white rounded-md hover:cursor-pointer">
-                      {pr.number === selectedPR.number
-                        ? pr.reviewers.map((i) => (
-                            <div
-                              key={pr.number}
-                              onClick={() => {
-                                handleSelectChange(pr.number);
-                              }}
-                              className="flex items-center p-2"
-                            >
-                              <img
-                                src={i.avatar}
-                                className="h-10 rounded-4xl"
-                              />
-                              <p className="ml-2">{i.username}</p>
-                            </div>
-                          ))
-                        : pr.reviewers.slice(0, 1).map((i) => (
-                            <div
-                              key={pr.number}
-                              onClick={() => {
-                                handleSelectChange(pr.number);
-                              }}
-                              className="flex items-center p-2"
-                            >
-                              <img
-                                src={i.avatar}
-                                className="h-10 rounded-4xl"
-                              />
-                              <p className="ml-2">{i.username}</p>
-                              {pr.reviewers.length > 1 ? (
-                                <ExpandMoreIcon />
-                              ) : null}
-                            </div>
-                          ))}
-                    </div>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <div className="flex items-center">
+                    <img
+                      className="h-8 w-8 rounded-full mr-2"
+                      src={pr.author.avatar}
+                      alt={pr.author.username}
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://github.com/identicons/' + pr.author.username + '.png';
+                      }}
+                    />
+                    <span className="font-medium">{pr.author.username}</span>
                   </div>
                 </td>
-                <td style={tdStyleDate}>{formatDate(pr.lastActionDate)}</td>
-                <td style={tdStyleArrow}>
-                  <ChevronRightIcon className="hover:cursor-pointer" />
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {formatDate(pr.createdAt)}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-900">
+                  <div className="flex items-center space-x-1">
+                    {pr.reviewers.length > 0 ? (
+                      <>
+                        {pr.reviewers.slice(0, 3).map((reviewer) => (
+                          <img
+                            key={reviewer.username}
+                            className="h-6 w-6 rounded-full"
+                            src={reviewer.avatar}
+                            alt={reviewer.username}
+                            title={reviewer.username}
+                            onError={(e) => {
+                              e.currentTarget.src = 'https://github.com/identicons/' + reviewer.username + '.png';
+                            }}
+                          />
+                        ))}
+                        {pr.reviewers.length > 3 && (
+                          <span className="text-xs text-gray-500 ml-1">
+                            +{pr.reviewers.length - 3} more
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span className="text-gray-400 italic">No reviewers</span>
+                    )}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {renderLastActionBadge(pr.lastActionDate)}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    pr.lastActionType === 'Created' 
+                      ? 'bg-blue-100 text-blue-800' 
+                      : pr.lastActionType === 'Commented'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : pr.lastActionType === 'Change Requested'
+                      ? 'bg-red-100 text-red-800'
+                      : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    {pr.lastActionType}
+                  </span>
                 </td>
               </tr>
             ))}
+            {currentItems.length === 0 && (
+              <tr>
+                <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                  No PRs found. Try loading PRs or adjusting your filters.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
-        <div className="flex justify-center mt-6 mb-6 space-x-2">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => handleClick(page)}
-              className={`px-4 py-2 rounded hover:cursor-pointer ${
-                page === currentPage
-                  ? "bg-green text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-4 space-x-2">
+          <button
+            onClick={() => handlePageClick(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 border rounded bg-white text-gray-700 border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+          
+          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+            const page = i + Math.max(1, currentPage - 2);
+            if (page > totalPages) return null;
+            return (
+              <button
+                key={page}
+                onClick={() => handlePageClick(page)}
+                className={`px-3 py-1 border rounded ${
+                  currentPage === page
+                    ? 'bg-blue-500 text-white border-blue-500'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                {page}
+              </button>
+            );
+          })}
+          
+          <button
+            onClick={() => handlePageClick(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 border rounded bg-white text-gray-700 border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
-};
-
-const thStyleId: React.CSSProperties = {
-  textAlign: "left",
-  height: "50px",
-  width: "5vw",
-  paddingLeft: "30px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  color: "#7B818E",
-  fontWeight: "600",
-  backgroundColor: "#F9FAFB",
-  cursor: "pointer",
-};
-const thStyleTitle: React.CSSProperties = {
-  textAlign: "left",
-  height: "50px",
-  width: "14vw",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  color: "#7B818E",
-  fontWeight: "600",
-  backgroundColor: "#F9FAFB",
-  cursor: "pointer",
-};
-const thStyleAuthor: React.CSSProperties = {
-  display: "flex",
-  textAlign: "left",
-  height: "50px",
-  width: "12vw",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  color: "#7B818E",
-  fontWeight: "600",
-  backgroundColor: "#F9FAFB",
-  cursor: "pointer",
-};
-const thStyleCreated: React.CSSProperties = {
-  textAlign: "left",
-  height: "50px",
-  width: "10vw",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  color: "#7B818E",
-  fontWeight: "600",
-  backgroundColor: "#F9FAFB",
-  cursor: "pointer",
-};
-const thStyleReviewers: React.CSSProperties = {
-  textAlign: "left",
-  height: "50px",
-  width: "15vw",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  color: "#7B818E",
-  fontWeight: "600",
-  backgroundColor: "#F9FAFB",
-};
-const thStyleDate: React.CSSProperties = {
-  textAlign: "left",
-  height: "50px",
-  width: "13vw",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  color: "#7B818E",
-  fontWeight: "600",
-  backgroundColor: "#F9FAFB",
-};
-
-const thStyleArrow: React.CSSProperties = {
-  textAlign: "left",
-  height: "50px",
-  width: "2vw",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  color: "#7B818E",
-  fontWeight: "600",
-  backgroundColor: "#F9FAFB",
-};
-
-const tdStyleId: React.CSSProperties = {
-  height: "70px",
-  width: "5vw",
-  textAlign: "left",
-  borderBottom: "2px solid #eee",
-  color: "#121827",
-  paddingLeft: "30px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  fontWeight: "600",
-};
-
-const tdStyleTitle: React.CSSProperties = {
-  height: "70px",
-  width: "14vw",
-  textAlign: "left",
-  borderBottom: "2px solid #eee",
-  color: "#121827",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  fontWeight: "600",
-};
-
-const tdStyleAuthor: React.CSSProperties = {
-  height: "70px",
-  width: "12vw",
-  textAlign: "left",
-  borderBottom: "2px solid #eee",
-  color: "#121827",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  fontWeight: "600",
-};
-
-const tdStyleCreated: React.CSSProperties = {
-  height: "50px",
-  width: "10vw",
-  textAlign: "left",
-  borderBottom: "2px solid #eee",
-  color: "#7F8491",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  fontWeight: "600",
-};
-
-const tdStyleReviewers: React.CSSProperties = {
-  height: "50px",
-  width: "15vw",
-  textAlign: "left",
-  borderBottom: "2px solid #eee",
-  color: "#4E5665",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  fontWeight: "600",
-};
-
-const tdStyleDate: React.CSSProperties = {
-  height: "50px",
-  width: "13vw",
-  textAlign: "left",
-  borderBottom: "2px solid #eee",
-  color: "#7F8491",
-  padding: "10px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  fontWeight: "600",
-};
-
-const tdStyleArrow: React.CSSProperties = {
-  height: "50px",
-  width: "2vw",
-  textAlign: "left",
-  borderBottom: "2px solid #eee",
-  color: "#7F8491",
-  paddingRight: "30px",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
-  fontWeight: "600",
-};
-
-const trStyle: React.CSSProperties = {
-  height: "",
-  backgroundColor: "white",
-  fontFamily: "system-ui, Avenir, Helvetica, Arial, sans-serif",
 };
 
 export default PRDashboard;
