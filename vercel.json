@@ -1,21 +1,13 @@
 {
-  "version": 2,
-  "builds": [
+  "buildCommand": "cd vite-project && npm run build",
+  "outputDirectory": "vite-project/dist",
+  "installCommand": "cd vite-project && npm install",
+  "devCommand": "cd vite-project && npm run dev",
+  "framework": "vite",
+  "rewrites": [
     {
-      "src": "vite-project/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "vite-project/dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/vite-project/dist/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
