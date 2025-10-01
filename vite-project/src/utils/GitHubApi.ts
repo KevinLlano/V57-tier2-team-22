@@ -15,9 +15,10 @@ export async function fetchMappedPullRequests(owner: string, repo: string) {
 
   return (raw as any[]).map(pr => {
     let lastActionType: string = 'Created';
-    if (pr.draft) lastActionType = 'Draft';
-    else if (pr.state === 'closed' && pr.merged_at) lastActionType = 'Merged';
-    else if (pr.state === 'closed') lastActionType = 'Closed';
+    if (pr.draft) lastActionType = 'Created';
+    else if (pr.state === 'closed' && pr.merged_at) lastActionType = 'Change Requested';
+    else if (pr.state === 'closed') lastActionType = 'Commented';
+    else if (pr.requested_reviewers && pr.requested_reviewers.length > 0) lastActionType = 'Change Requested';
     return {
       number: pr.number,
       title: pr.title,

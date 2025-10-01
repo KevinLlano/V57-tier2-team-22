@@ -1,104 +1,62 @@
-import Button from './Button';
+import { useState } from 'react';
+import Toast from './Toast';
 import Filters from './Filters';
-import { useCallback } from 'react';
 
-interface SectionHeaderProps {
-  owner: string;
-  repo: string;
-  setOwner: (v: string) => void;
-  setRepo: (v: string) => void;
-  onLoad: () => void;
-}
+type SectionHeaderProps = {
+  author: string;
+  reviewer: string;
+  authorOptions: string[];
+  reviewerOptions: string[];
+  onAuthorChange: (value: string) => void;
+  onReviewerChange: (value: string) => void;
+  onClear: () => void;
+  totalPRs: number;
+  filteredPRs: number;
+  activeTab: 'open' | 'closed';
+};
 
+export default function SectionHeader({
+  author,
+  reviewer,
+  authorOptions,
+  reviewerOptions,
+  onAuthorChange,
+  onReviewerChange,
+  onClear,
+  totalPRs,
+  filteredPRs,
+  activeTab,
+}: SectionHeaderProps) {
+  const [toast, setToast] = useState<string | null>(null);
 
-export default function SectionHeader({ owner, repo, setOwner, setRepo, onLoad }: SectionHeaderProps) {
-  // Helper to request current PR data from Dashboard via custom event bridge
-  const getCurrentPRs = useCallback(async () => {
-    return new Promise<any[]>(resolve => {
-      const handler = (e: any) => {
-        window.removeEventListener('provide-pr-data', handler as any);
-        resolve(e.detail || []);
-      };
-      window.addEventListener('provide-pr-data', handler as any, { once: true });
-      window.dispatchEvent(new CustomEvent('request-pr-data', { detail: { replyEvent: 'provide-pr-data' } }));
-      setTimeout(() => {
-        window.removeEventListener('provide-pr-data', handler as any);
-        resolve([]);
-      }, 2000);
-    });
-  }, []);
-
-  // Reusable download trigger
-  const triggerDownload = (blob: Blob, filename: string) => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  };
-
-  // Export CSV of currently displayed PRs
-  const handleExport = useCallback(async () => {
-    const prData = await getCurrentPRs();
-    if (!prData.length) {
-      alert('No PR data to export yet. Click Load first.');
-      return;
-    }
-    // Flatten data for CSV
-    const rows: Record<string, any>[] = prData.map((pr: any) => ({
-      Number: pr.number,
-      Title: pr.title,
-      Author: pr.author?.username,
-      State: pr.state,
-      CreatedAt: pr.createdAt,
-      LastActionDate: pr.lastActionDate,
-      LastActionType: pr.lastActionType || '',
-      Reviewers: (pr.reviewers || []).map((r: any) => r.username).join('; '),
-      URL: pr.url
-    }));
-    const headers = Object.keys(rows[0]);
-    const escape = (val: any) => {
-      if (val === null || val === undefined) return '';
-      const str = String(val);
-      return /[",\n]/.test(str) ? '"' + str.replace(/"/g, '""') + '"' : str;
-    };
-    const lines = [headers.join(','), ...rows.map(r => headers.map(h => escape((r as any)[h])).join(','))];
-    const csv = lines.join('\n');
-    triggerDownload(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), `${owner}-${repo}-prs.csv`);
-    setTimeout(() => alert('Downloaded Successfully'), 400);
-  }, [owner, repo, getCurrentPRs]);
-
-  // Export raw JSON of currently displayed PRs
-  const handleExportJson = useCallback(async () => {
-    const prData = await getCurrentPRs();
-    if (!prData.length) {
-      alert('No PR data to export yet. Click Load first.');
-      return;
-    }
-    triggerDownload(new Blob([JSON.stringify(prData, null, 2)], { type: 'application/json' }), `${owner}-${repo}-prs.json`);
-    setTimeout(() => alert('Saved Successfully'), 400);
-  }, [owner, repo, getCurrentPRs]);
   return (
     <div className='bg-white rounded-2xl flex flex-col p-5 gap-4 border-b border-grey-secondary'>
-      <div className='flex flex-wrap gap-6 items-center justify-between'>
-        <h1 className='font-bold text-xl md:text-3xl'>Open PRs</h1>
-        <div className='flex gap-3 items-center '>
-          <Button variant='primary' onClick={handleExportJson}>Save JSON</Button>
-          <Button variant='primary' onClick={handleExport}>Download CSV</Button>
-          <Button
-            variant='primary'
-            onClick={() => {
-              alert('refreshed');
-            }}
-          >
-            refresh
-          </Button>
+  
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
+        <div className="flex flex-col gap-3 md:flex-row md:gap-5 flex-wrap items-start">
+          <Filters
+            author={author}
+            reviewer={reviewer}
+            authorOptions={authorOptions}
+            reviewerOptions={reviewerOptions}
+            onAuthorChange={onAuthorChange}
+            onReviewerChange={onReviewerChange}
+            onClear={onClear}
+          />
+        </div>
+
+        {/* PR count and active filters - positioned to the right for visual balance maybe? */}
+        <div className="flex flex-col text-sm text-gray-600 lg:text-right">
+          <div className="font-medium">
+            {totalPRs} total PRs • {filteredPRs} {activeTab}
+          </div>
+          <div className="text-gray-600">
+            Active → Author: {author || 'All'}, Reviewer: {reviewer || 'All'}
+          </div>
         </div>
       </div>
-      <Filters owner={owner} repo={repo} setOwner={setOwner} setRepo={setRepo} onLoad={onLoad} />
+      
+      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </div>
   );
 }
