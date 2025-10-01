@@ -1,4 +1,4 @@
-export interface prData {
+export interface PRData {
   number: number;
   title: string;
   url: string;
@@ -8,11 +8,11 @@ export interface prData {
     avatar: string;
   };
   createdAt: string;
-  reviewers: [
-    {
-      username: string;
-      avatar: string;
-    }
-  ];
+  reviewers: {
+    username: string;
+    avatar: string;
+  }[];
   lastActionDate: string;
 }
+
+const mockData = rawData as PRData[];
