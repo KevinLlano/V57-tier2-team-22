@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
               Track Your Team's GitHub Pull Requests
               <span className='block italic'>
                 with{' '}
-                <span className='text-[#fd9f49] underline decoration-4'>
+                <span className='text-[#211306] underline decoration-4'>
                   ease
                 </span>
               </span>
