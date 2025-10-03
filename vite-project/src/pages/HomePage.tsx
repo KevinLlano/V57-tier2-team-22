@@ -1,75 +1,42 @@
 import React from 'react';
-import Skater from '../assets/Skater.png';
-import { Link } from 'react-router-dom';
+import Skater from '../assets/hero-img.png';
+import Button from '../components/Button';
 
 const HomePage: React.FC = () => {
   return (
-    <div className='bg-[#f4f5f3] flex flex-col'>
+    <div>
       {/* Hero - white - main page */}
-      <section className='min-h-[95vh] bg-white flex items-center'>
-        <div className='max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-12 items-center w-full'>
-          <div>
-            <h1 className='text-4xl md:text-6xl font-black tracking-tight text-black'>
-              Track Your Team's GitHub Pull Requests
-              <span className='block italic'>
-                with{' '}
-                <span className='text-[#211306] underline decoration-4'>
-                  ease
-                </span>
+      {/* image */}
+      <section className='h-screen flex flex-col md:flex-col-reverse bg-bg-main px-4  md:p-10 lg:px-20 lg:pb-7'>
+        <div className='flex justify-center mt-16 mb-5 md:mt-0'>
+          <img
+            src={Skater}
+            alt='Skater illustration'
+            className='max-h-[40vh] md:max-h-[40vh]'
+          />
+        </div>
+        {/* text */}
+        <div className=' flex flex-col text-center items-center md:items-start gap-7 md:text-left'>
+          <div className='font-bold text-3xl md:text-5xl lg:text-6xl flex flex-col gap-2'>
+            <p>Track Your Team's</p>
+            <p className=''>GitHub Pull Requests</p>
+            <p className='block italic'>
+              with{' '}
+              <span className='text-[#FF720D] underline decoration-4'>
+                ease
               </span>
-            </h1>
-            <p className='mt-6 text-gray-700 text-xl max-w-xl text-center'>
-              Stay in the loop, power up your collab, and keep every PR on your
-              radar
             </p>
-            <div className='mt-8'>
-              <Link
-                to='/prs'
-                className='inline-flex items-center gap-2 bg-[#0f7a6e] hover:bg-[#0c5f59] text-white font-medium px-6 py-4 rounded-lg shadow-lg text-lg'
-              >
-                Get started → See Open PR’s
-              </Link>
-            </div>
           </div>
-          <div className='flex justify-center'>
-            <div className='w-full max-w-2xl aspect-[4/3] rounded-2xl bg-white shadow-[0_12px_48px_rgba(0,0,0,0.08)] grid place-items-center'>
-              <img
-                src={Skater}
-                alt='Skater illustration'
-                className='w-68 h-68 md:w-122 md:h-122 object-contain'
-              />
-            </div>
-          </div>
+          <p className='mb-2 mx-3 md:text-left'>
+            Stay in the loop, power up your collab, and keep every PR on your
+            radar
+          </p>
+
+          <Button size='lg'>Search Github</Button>
         </div>
       </section>
-
-      {/* scroll down button */}
-      {/* <div className="w-full flex justify-center mt-4 mb-8">
-        <button
-          aria-label='Scroll to bottom'
-          onClick={() =>
-            window.scrollTo({
-              top: document.body.scrollHeight,
-              behavior: 'smooth',
-            })
-          }
-          className='inline-flex items-center gap-3 bg-gradient-to-r from-[#1e1e1e] to-[#0f7a6e] text-white font-medium px-4 py-2 rounded-full shadow-lg transform transition hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#06b6d4]/30'
-        >
-          <svg className='w-4 h-4' viewBox='0 0 20 20' fill='none' aria-hidden>
-            <path
-              d='M4 7l6 6 6-6'
-              stroke='currentColor'
-              strokeWidth='1.8'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-            />
-          </svg>
-          <span>Scroll</span>
-        </button>
-      </div> */}
-
-      {/* Green feature bg - full second page  */}
-      <section className='min-h-[calc(100vh-22rem)] bg-[#134b47] text-black/90 flex items-start'>
+      {/* Green feature bg - full second page */}
+      <section className='h-screen bg-green'>
         <div className='max-w-6xl mx-auto px-6 py-20 w-full'>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
             <article className='bg-white rounded-2xl p-8 shadow-lg flex flex-col items-start justify-start  h-72'>
@@ -108,7 +75,6 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
-
       {/* floating chat button */}
       {/* <button aria-label="chat" className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-white shadow grid place-items-center border">
         💬
