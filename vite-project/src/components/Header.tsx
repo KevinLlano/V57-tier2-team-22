@@ -22,15 +22,17 @@ export const Header: React.FC = () => {
   return (
     //TODO: scroll transparent - > use scrolled fn provided
     <header
-      className={`flex justify-between items-center sticky top-5 z-30 rounded-xl p-2 md:px-6 py-2
-            mx-4 md:mx-32 lg:mx-80
-             shadow-md ${scrolled ? 'bg-white opacity-80' : ' bg-white'}`}
+      className={`flex h-14 md:h-16 w-full justify-between items-center fixed top-0 z-10 
+    p-2 md:px-16
+    transition-colors duration-300 ease-in-out
+    ${scrolled ? 'bg-white' : 'bg-bg-main'}
+  `}
     >
       {/* logo + brand name */}
       <Link to='/'>
-        <div className='flex gap-3 items-center ml-3 md:ml-0'>
-          <img src={logo} alt='logo' className='h-5 md:h-8' />
-          <span className='font-bold text-lg md:text-3xl'>pr tracker</span>
+        <div className='flex gap-3 items-center justify-center ml-3 md:ml-0'>
+          <img src={logo} alt='logo' className='h-6 md:h-8' />
+          <span className='font-semibold text-2xl md:text-3xl'>pr tracker</span>
         </div>
       </Link>
 
