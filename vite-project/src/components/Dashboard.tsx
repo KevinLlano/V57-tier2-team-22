@@ -5,10 +5,11 @@ import { formatDate } from "../utils/formatDate";
 interface DashboardProps {
   prs: PRData[];
   loading: boolean;
+  activeTab: string;
 }
 
 const PRDashboard: React.FC<DashboardProps> = ({ prs, loading, activeTab }) => {
-  const [data, setData] = useState(false);
+  const [data, setData] = useState<PRData[]>([]);
   const [titleAsc, setTitleAsc] = useState(true);
   const [authorAsc, setAuthorAsc] = useState(true);
   const [numAsc, setNumAsc] = useState(true);
@@ -88,7 +89,7 @@ const PRDashboard: React.FC<DashboardProps> = ({ prs, loading, activeTab }) => {
 
   return (
     <div className="flex flex-col items-center bg-[#f5f5f4]">
-      <div className="overflow-x-auto border border-gray-300 rounded-lg shadow-md bg-white w-full max-w-7xl">
+      <div className="overflow-x-auto border border-gray-300 rounded-lg shadow-md bg-white w-full mt-6 max-w-7xl">
         <table className="min-w-full bg-white">
           <thead className="bg-gray-100">
             <tr>
