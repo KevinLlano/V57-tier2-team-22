@@ -37,10 +37,6 @@ export default function Filters({
       <div className='mt-1 md:mt-0'>
         <Button onClick={onClear}>Clear Filters</Button>
       </div>
-      {/* Status line */}
-      <div className="text-sm text-error self-center flex-1 min-w-[220px]">
-        Active → Author: {author || 'All'}, Reviewer: {reviewer || 'All'}
-      </div>
     </>
   );
 }
