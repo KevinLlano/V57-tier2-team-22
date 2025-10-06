@@ -48,7 +48,7 @@ const Footer: React.FC = () => (
         </a>
       </div>
       {/* Team */}
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:flex lg:justify-between gap-10 w-full '>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:flex lg:justify-between gap-10 w-full text-black '>
         {/* DEVELOPERS */}
         <section>
           <h3 className='mb-4 text-md text-black capitalize font-medium'>
@@ -136,7 +136,7 @@ const Footer: React.FC = () => (
         </section>
       </div>
     </div>
-    <hr />
+    <hr className='border-t border-black' />
     <div className='text-center text-xs text-black p-2'>
       © {new Date().getFullYear()} PR Tracker | Chingu Voyage 57 Team 22
     </div>
