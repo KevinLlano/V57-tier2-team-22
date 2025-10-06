@@ -5,10 +5,10 @@ type TabsProps = {
 
 export default function Tabs({ activeTab, onTabChange }: TabsProps) {
   return (
-    <div className='flex bg-white p-1.5 rounded-full shadow-md font-semibold'>
+    <div className='flex p-2 rounded-full shadow-md font-semibold'>
       <button
         onClick={() => onTabChange('open')}
-        className={`rounded-full py-1.5 text-center flex-1 cursor-pointer ${
+        className={`rounded-full py-2 lg:py-3 text-center flex-1 cursor-pointer ${
           activeTab === 'open' ? 'bg-green text-white' : 'text-black'
         }`}
       >
@@ -19,7 +19,7 @@ export default function Tabs({ activeTab, onTabChange }: TabsProps) {
           console.log('Clicked closed tab!');
           onTabChange('closed');
         }}
-        className={`rounded-full py-1.5 text-center flex-1 cursor-pointer ${
+        className={`rounded-full py-2 lg:py-3 text-center flex-1 cursor-pointer ${
           activeTab === 'closed' ? 'bg-green text-white' : 'text-black'
         }`}
       >

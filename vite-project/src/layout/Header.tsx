@@ -32,7 +32,10 @@ export const Header: React.FC = () => {
       <Link to='/'>
         <div className='flex gap-3 items-center justify-center ml-3 md:ml-0'>
           <img src={logo} alt='logo' className='h-6 md:h-8' />
-          <span className='font-semibold text-2xl md:text-3xl text-white'>
+          <span
+            className='font-semibold text-2xl md:text-3xl text-white '
+            style={{ textShadow: '0 2px 3px rgba(0, 0, 0, 0.3)' }}
+          >
             pr tracker
           </span>
         </div>
