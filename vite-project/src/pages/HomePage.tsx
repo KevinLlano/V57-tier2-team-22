@@ -1,7 +1,25 @@
+import { useNavigate } from 'react-router-dom';
 import Card from '../components/Card';
+import Search from '../components/Search';
+import { useState } from 'react';
+import Footer from '../layout/Footer';
 // TODO: CLEAN UP COLORS ADD TO GLOBALS CSS
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  const [owner, setOwner] = useState('');
+  const [repo, setRepo] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // will navigate to /prs/owners/repo
+  const handleLoad = () => {
+    if (!owner || !repo) {
+      return;
+    }
+    setLoading(true);
+    navigate(`/prs?owner=${owner}&repo=${repo}`);
+  };
+
   return (
     <div className='bg-black text-bg-main'>
       {/* --- Hero section--- */}
@@ -30,10 +48,13 @@ const HomePage: React.FC = () => {
 
           {/* Search Bar */}
           <div className='flex items-center justify-center gap-2 mt-6'>
-            <input
-              type='text'
-              placeholder='Search GitHub owner/repo...'
-              className='px-4 py-3 border rounded-full w-64 md:w-80 lg:w-96 focus:outline-none focus:ring-2 focus:ring-accent'
+            <Search
+              owner={owner}
+              repo={repo}
+              setOwner={setOwner}
+              setRepo={setRepo}
+              onLoad={handleLoad}
+              loading={loading}
             />
           </div>
         </div>
@@ -83,6 +104,7 @@ const HomePage: React.FC = () => {
       {/* <button aria-label="chat" className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-white shadow grid place-items-center border">
         💬
       </button> */}
+      <Footer />
     </div>
   );
 };
