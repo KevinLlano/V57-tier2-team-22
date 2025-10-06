@@ -40,7 +40,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* --- FEATURES SECTION --- */}
-      <section className='min-h-screen flex flex-col gap-6 md:gap-10 lg:gap-20 items-center p-8 md:py-12 bg-[#0b1012] lg:grid grid-cols-2'>
+      <section className='min-h-screen flex flex-col gap-6 md:gap-10 lg:gap-20 items-center p-8 md:py-12 bg-black-900 lg:grid grid-cols-2'>
         {/* grid left */}
         <div>
           <h2 className='text-4xl md:text-5xl lg:text-9xl whitespace-pre-line'>

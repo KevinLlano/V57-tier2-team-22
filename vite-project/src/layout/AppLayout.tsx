@@ -5,9 +5,11 @@ import Footer from './Footer';
 
 const AppLayout: React.FC = () => {
   return (
-    <div className='h-screen bg-bg-main'>
+    <div className='min-h-screen flex flex-col'>
       <Header />
-      <Outlet />
+      <main className='bg-bg-main overflow-y-auto'>
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );

@@ -7,7 +7,7 @@ type CardProps = {
 export default function Card({ title, text, icon }: CardProps) {
   return (
     <div>
-      <div className='bg-[#151e22] rounded-4xl p-10 flex flex-col gap-4 text-center text-grey-secondary lg:flex-row-reverse'>
+      <div className='bg-black-875 rounded-4xl p-10 flex flex-col gap-4 text-center text-grey-secondary lg:flex-row-reverse'>
         {/* image */}
         <div>
           <div className='mb-10 text-7xl flex justify-center items-center'>
