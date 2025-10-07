@@ -23,17 +23,13 @@ export default function SectionHeader({
   onAuthorChange,
   onReviewerChange,
   onClear,
-  totalPRs,
-  filteredPRs,
-  activeTab,
 }: SectionHeaderProps) {
   const [toast, setToast] = useState<string | null>(null);
 
   return (
-    <div className='bg-white rounded-2xl flex flex-col p-5 gap-4 border-b border-grey-secondary'>
-  
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
-        <div className="flex flex-col gap-3 md:flex-row md:gap-5 flex-wrap items-start">
+    <div className='flex gap-4'>
+      <div>
+        <div className='flex gap-3  md:gap-5 flex-wrap items-start'>
           <Filters
             author={author}
             reviewer={reviewer}
@@ -44,18 +40,8 @@ export default function SectionHeader({
             onClear={onClear}
           />
         </div>
-
-        {/* PR count and active filters - positioned to the right for visual balance maybe? */}
-        <div className="flex flex-col text-sm text-gray-600 lg:text-right">
-          <div className="font-medium">
-            {totalPRs} total PRs • {filteredPRs} {activeTab}
-          </div>
-          <div className="text-gray-600">
-            Active → Author: {author || 'All'}, Reviewer: {reviewer || 'All'}
-          </div>
-        </div>
       </div>
-      
+
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </div>
   );

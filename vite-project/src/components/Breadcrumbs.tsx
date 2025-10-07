@@ -1,33 +1,35 @@
-// TODO: when clicked goes to users profile or repo
 import { Link } from 'react-router-dom';
 
 type BreadcrumbsProps = {
-  user: string;
+  owner: string;
   repo: string;
-  userUrl: string;
-  repoUrl: string;
 };
 
-export default function Breadcrumbs({
-  user,
-  repo,
-  userUrl,
-  repoUrl,
-}: BreadcrumbsProps) {
+export default function Breadcrumbs({ owner, repo }: BreadcrumbsProps) {
+  if (!owner || !repo) return null;
   return (
     <div>
       {' '}
-      <nav className='text-sm text-grey flex items-center gap-2'>
-        <Link to={userUrl} className='hover:underline cursor-pointer'>
-          {user}
+      <nav className='text-sm text-grey flex items-center gap-2 mb-4'>
+        <Link to='/' className='hidden md:inline hover:text-green font-medium'>
+          Home {''} /
         </Link>
-        <span>/</span>
-        <Link
-          to={repoUrl}
-          className='font-medium text-black hover:underline cursor-pointer'
+        <a
+          href={`https://github.com/${owner}`}
+          target='blank'
+          rel='noopener noreferrer'
         >
-          {repo}
-        </Link>
+          {owner}
+        </a>
+        <span className='text-grey'>/</span>
+        <a
+          href={`https://github.com/${owner}/${repo}`}
+          target='blank'
+          rel='noopener noreferrer'
+        >
+          {' '}
+          <span className='text-green'>{repo}</span>
+        </a>
       </nav>
     </div>
   );
