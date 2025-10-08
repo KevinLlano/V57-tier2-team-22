@@ -25,16 +25,13 @@ const Search: React.FC<SearchProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
-    console.log('handle search called, input:', input);
   };
 
   const handleSearch = () => {
     if (isValid) {
       const [owner, repo] = input.split('/').map((part) => part.trim());
-      console.log('Parsed owner/repo:', owner, repo);
       setOwner(owner);
       setRepo(repo);
-      console.log('setters called');
       onLoad();
     } else {
       // change later

@@ -13,13 +13,10 @@ const HomePage: React.FC = () => {
 
   // will navigate to /prs/owners/repo
   const handleLoad = () => {
-    console.log('handleLoad triggered', { owner, repo });
     if (!owner || !repo) {
-      console.warn('missing owner/repo, navigation aborted');
       return;
     }
     setLoading(true);
-    console.log('navigating to:', `/prs?owner=${owner}&repo=${repo}`);
     navigate(`/prs?owner=${owner}&repo=${repo}`);
   };
 

@@ -42,8 +42,7 @@ export const Header: React.FC = () => {
       </Link>
 
       <span
-        className='text-base hidden sm:inline text-grey
-        '
+        className='text-sm hidden sm:inline text-grey'
         aria-label={`Today is ${today}`}
       >
         {today}
