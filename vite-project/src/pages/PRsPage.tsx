@@ -35,7 +35,7 @@ export default function PRsPage() {
     // console.log('refreshed');
     try {
       // TODO: for testing! remove this
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      // await new Promise((resolve) => setTimeout(resolve, 3000));
       const data = await fetchMappedPullRequests(owner, repo);
       setPrs(data);
     } catch (error) {
