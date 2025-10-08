@@ -31,7 +31,10 @@ export default function PRsPage() {
   const loadPRs = async () => {
     if (!owner || !repo) return;
     setLoading(true);
+    console.log('refreshed');
     try {
+      // TODO: for testing! remove this
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const data = await fetchMappedPullRequests(owner, repo);
       setPrs(data);
     } catch (error) {
@@ -186,12 +189,14 @@ export default function PRsPage() {
       )}
 
       {loading && (
-        <div className='mt-20 text-grey text-lg'>Fetching pull requests...</div>
+        <div className='mt-20 text-grey text-lg text-center'>
+          Fetching pull requests...
+        </div>
       )}
 
       {!loading && owner && repo && prs.length === 0 && (
-        <div className='mt-20 text-center text-grey'>
-          No PRs found for{' '}
+        <div className='text-2xl mt-20 text-center text-grey'>
+          No GitHub Repository found for{' '}
           <strong>
             {owner}/{repo}
           </strong>
@@ -234,11 +239,19 @@ export default function PRsPage() {
               </Button>
             </div>
           </div>
-          <PRDashboard
-            prs={filteredPRs}
-            activeTab={activeTab}
-            loading={loading}
-          />
+          <div className='mt-6'>
+            {loading ? (
+              <div className='text-center text-grey text-lg'>
+                Fetching pull requests...
+              </div>
+            ) : (
+              <PRDashboard
+                prs={filteredPRs}
+                activeTab={activeTab}
+                loading={loading}
+              />
+            )}
+          </div>
         </div>
       )}
     </div>
