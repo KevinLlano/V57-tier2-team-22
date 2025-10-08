@@ -3,29 +3,29 @@ import logo from '../assets/logo.png';
 
 const developers = [
   {
-    name: 'Jazz',
+    name: 'Jazz Bullecer',
     Github: 'https://github.com/jazxbx',
   },
   {
-    name: 'Kevin',
+    name: 'Kevin LLanos',
     LinkedIn: 'https://www.linkedin.com/in/kevinllanos7',
     Github: 'https://github.com/KevinLlano',
   },
   {
-    name: 'Matthew',
+    name: 'Matthew Neie',
     LinkedIn: 'https://linkedin.com/in/matthew-neie',
     Github: 'https://github.com/MatthewNeie',
   },
 ];
 
 const scrumMaster = {
-  name: 'Thais',
+  name: 'Thais Inatomi',
   LinkedIn: 'https://www.linkedin.com/in/thaisaya/',
   Github: 'https://github.com/thaisaya',
 };
 
 const productOwner = {
-  name: 'Viral',
+  name: 'Viral Barot',
   LinkedIn: 'https://www.linkedin.com/in/viral-barot-mba/',
 };
 
@@ -57,7 +57,7 @@ const Footer: React.FC = () => (
           <ul className='space-y-4 text-sm'>
             {developers.map((developer) => (
               <li className='flex items-center' key={developer.name}>
-                <span className='w-20'>{developer.name}</span>
+                <span className='min-w-24 mr-3'>{developer.name}</span>
                 {developer.Github && (
                   <a
                     className='pill hover:pillHover'
@@ -90,7 +90,7 @@ const Footer: React.FC = () => (
           </h3>
           <ul className='space-y-4 text-sm'>
             <li className='flex'>
-              <span className='w-20'>{scrumMaster.name}</span>
+              <span className='min-w-24 mr-3'>{scrumMaster.name}</span>
               <div className='flex'>
                 <a
                   href={scrumMaster.LinkedIn}
