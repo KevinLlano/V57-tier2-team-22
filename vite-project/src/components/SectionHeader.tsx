@@ -1,36 +1,48 @@
-import Button from './Button';
+import { useState } from 'react';
+import Toast from './Toast';
 import Filters from './Filters';
 
-// TODO: create toast component
+type SectionHeaderProps = {
+  author: string;
+  reviewer: string;
+  authorOptions: string[];
+  reviewerOptions: string[];
+  onAuthorChange: (value: string) => void;
+  onReviewerChange: (value: string) => void;
+  onClear: () => void;
+  totalPRs: number;
+  filteredPRs: number;
+  activeTab: 'open' | 'closed';
+};
 
-export default function SectionHeader() {
+export default function SectionHeader({
+  author,
+  reviewer,
+  authorOptions,
+  reviewerOptions,
+  onAuthorChange,
+  onReviewerChange,
+  onClear,
+}: SectionHeaderProps) {
+  const [toast, setToast] = useState<string | null>(null);
+
   return (
-    <div className='bg-white rounded-2xl flex flex-col p-5 md:p-7 gap-3 border-b border-grey-secondary'>
-      <h1 className='font-bold text-xl mb-3.5 md:text-3xl '>Open PRs</h1>
-      <div className='flex gap-5'>
-        <div>
-          <Button
-            variant='secondary'
-            onClick={() => {
-              alert('saved');
-            }}
-          >
-            SAVE JSON
-          </Button>
-        </div>
-        <div>
-          <Button
-            variant='tertiary'
-            onClick={() => {
-              alert('refreshed');
-            }}
-          >
-            refresh
-          </Button>
+    <div className='flex gap-4'>
+      <div>
+        <div className='flex gap-3  md:gap-5 flex-wrap items-start'>
+          <Filters
+            author={author}
+            reviewer={reviewer}
+            authorOptions={authorOptions}
+            reviewerOptions={reviewerOptions}
+            onAuthorChange={onAuthorChange}
+            onReviewerChange={onReviewerChange}
+            onClear={onClear}
+          />
         </div>
       </div>
 
-      <Filters />
+      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </div>
   );
 }

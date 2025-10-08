@@ -1,30 +1,42 @@
 import DropdownMenu from './DropdownMenu';
 import Button from './Button';
-import { useState } from 'react';
 
-export default function Filters() {
-  const [author, setAuthor] = useState('');
-  const [reviewer, setReviewer] = useState('');
+type FiltersProps = {
+  author: string;
+  reviewer: string;
+  authorOptions: string[];
+  reviewerOptions: string[];
+  onAuthorChange: (val: string) => void;
+  onReviewerChange: (val: string) => void;
+  onClear: () => void;
+};
 
+export default function Filters({
+  author,
+  reviewer,
+  authorOptions,
+  reviewerOptions,
+  onAuthorChange,
+  onReviewerChange,
+  onClear,
+}: FiltersProps) {
   return (
-    <div className='flex flex-col gap-2 md:flex-row md:gap-5'>
+    <>
       <DropdownMenu
         label='Author'
-        options={['jazz', 'matthew', 'kevin', 'viral', 'thais']}
-        onSelect={setAuthor}
+        options={authorOptions}
+        value={author}
+        onSelect={onAuthorChange}
       />
       <DropdownMenu
         label='Reviewer'
-        options={['jazz', 'matthew', 'kevin', 'viral', 'thais']}
-        onSelect={setReviewer}
+        options={reviewerOptions}
+        value={reviewer}
+        onSelect={onReviewerChange}
       />
-      <div className='mt-3 md:mt-0'>
-        <Button onClick={() => alert('searching....')}>Search</Button>
+      <div className='mt-1 md:mt-0'>
+        <Button onClick={onClear}>Clear Filters</Button>
       </div>
-      {/* TODO: for debugging display, remove later */}
-      <div className='text-sm text-error self-center flex-1'>
-        Active → Author: {author || 'All'}, Reviewer: {reviewer || 'All'}
-      </div>
-    </div>
+    </>
   );
 }
