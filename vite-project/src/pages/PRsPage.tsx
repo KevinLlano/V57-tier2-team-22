@@ -15,7 +15,6 @@ export default function PRsPage() {
   //location gets data from search bar in usenavigate
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  console.log(location.pathname);
 
   //get from params or empty
   const [owner, setOwner] = useState(params.get('owner') || '');
@@ -31,7 +30,7 @@ export default function PRsPage() {
   const loadPRs = async () => {
     if (!owner || !repo) return;
     setLoading(true);
-    console.log('refreshed');
+    // console.log('refreshed');
     try {
       // TODO: for testing! remove this
       await new Promise((resolve) => setTimeout(resolve, 3000));

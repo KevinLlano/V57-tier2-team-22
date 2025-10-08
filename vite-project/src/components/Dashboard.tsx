@@ -29,7 +29,7 @@ const PRDashboard: React.FC<DashboardProps> = ({ prs, loading, activeTab }) => {
     setData(prs);
   }, [prs]);
 
-  console.log(activeTab);
+  // console.log(activeTab);
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
