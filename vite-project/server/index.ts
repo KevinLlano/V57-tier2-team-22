@@ -21,11 +21,17 @@ app.get("/auth/github", (req, res) => {
   );
 });
 
+interface GitHubTokenResponse {
+  access_token: string;
+  token_type: string;
+  scope: string;
+}
+
 app.get("/auth/github/callback", async (req, res) => {
   const code = req.query.code as string;
 
   try {
-    const tokenRes = await axios.post(
+    const tokenRes = await axios.post<GitHubTokenResponse>(
       `https://github.com/login/oauth/access_token`,
       {
         client_id: CLIENT_ID,
@@ -40,7 +46,7 @@ app.get("/auth/github/callback", async (req, res) => {
     );
 
     const accessToken = tokenRes.data.access_token;
-    res.redirect(`prtrackerr.netlify.app/prs?token=${accessToken}`);
+    res.redirect(`https://prtrackerr.netlify.app/prs?token=${accessToken}`);
   } catch (err) {
     console.error(err);
     res.status(500).send("Authentication failed");
