@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -14,7 +14,8 @@ const CLIENT_ID = process.env.CLIENT_ID!;
 const CLIENT_SECRET = process.env.CLIENT_SECRET!;
 
 app.get("/auth/github", (req, res) => {
-  const redirect_uri = "http://localhost:4000/auth/github/callback";
+  const redirect_uri =
+    "https://v57-tier2-team-22.onrender.com/auth/github/callback";
   res.redirect(
     `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirect_uri}&scope=repo`
   );
@@ -39,7 +40,7 @@ app.get("/auth/github/callback", async (req, res) => {
     );
 
     const accessToken = tokenRes.data.access_token;
-    res.redirect(`http://localhost:5173/prs?token=${accessToken}`);
+    res.redirect(`prtrackerr.netlify.app/prs?token=${accessToken}`);
   } catch (err) {
     console.error(err);
     res.status(500).send("Authentication failed");
@@ -47,5 +48,5 @@ app.get("/auth/github/callback", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on ${PORT}`);
 });
