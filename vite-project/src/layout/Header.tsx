@@ -26,7 +26,8 @@ export const Header: React.FC = ({ user, token, onLogout }) => {
   }, []);
 
   const handleLogin = () => {
-    window.location.href = "http://localhost:4000/auth/github";
+    window.location.href =
+      "https://v57-tier2-team-22.onrender.com//auth/github";
   };
 
   console.log(user);
