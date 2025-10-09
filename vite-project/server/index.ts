@@ -14,8 +14,7 @@ const CLIENT_ID = process.env.CLIENT_ID!;
 const CLIENT_SECRET = process.env.CLIENT_SECRET!;
 
 app.get("/auth/github", (req, res) => {
-  const redirect_uri =
-    "https://v57-tier2-team-22.onrender.com/auth/github/callback";
+  const redirect_uri = "https://localhost:4000/auth/github/callback";
   res.redirect(
     `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirect_uri}&scope=repo`
   );
