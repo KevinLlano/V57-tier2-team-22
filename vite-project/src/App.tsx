@@ -30,6 +30,7 @@ function App() {
       const res = await axios.get("https://api.github.com/user", {
         headers: { Authorization: `token ${token}` },
       });
+      console.log(res.data);
       setUser({
         name: res.data.name || res.data.login,
         avatar_url: res.data.avatar_url,
@@ -48,10 +49,6 @@ function App() {
     } catch (err) {
       console.error("Error fetching repos:", err);
     }
-  };
-
-  const handleLogin = () => {
-    window.location.href = "http://localhost:4000/auth/github";
   };
 
   const handleLogout = () => {
