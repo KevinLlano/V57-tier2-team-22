@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import CircularProgress from '@mui/material/CircularProgress';
+import React, { useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface SearchProps {
   setOwner: (value: string) => void;
   setRepo: (value: string) => void;
   loading: boolean;
+  input: string;
+  setInput: (value: string) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ setOwner, setRepo, loading }) => {
-  const [input, setInput] = useState('');
+const Search: React.FC<SearchProps> = ({
+  setOwner,
+  setRepo,
+  onLoad,
+  loading,
+  input,
+  setInput,
+}) => {
+  const isValid = input.includes("/") && input.split("/").length === 2;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
-
+  
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const [owner, repo] = input.split('/').map((part) => part.trim());
