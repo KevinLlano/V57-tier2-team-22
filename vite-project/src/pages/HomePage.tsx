@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom";
-import Card from "../components/Card";
-import Search from "../components/Search";
-import { useState } from "react";
-import Footer from "../layout/Footer";
+import { useNavigate } from 'react-router-dom';
+import Card from '../components/Card';
+import Search from '../components/Search';
+import { useEffect, useState } from 'react';
+import Footer from '../layout/Footer';
+
 // TODO: CLEAN UP COLORS ADD TO GLOBALS CSS
 
 const HomePage: React.FC = () => {
@@ -12,14 +13,14 @@ const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState<string>("");
 
-  // will navigate to /prs/owners/repo
-  const handleLoad = () => {
-    if (!owner || !repo) {
-      return;
+  // runs only after both owner and repo states are set, then navigates to /prs/:owner/:repo
+  useEffect(() => {
+    if (owner && repo) {
+      console.log({ owner, repo });
+      setLoading(true);
+      navigate(`/prs?owner=${owner}&repo=${repo}`);
     }
-    setLoading(true);
-    navigate(`/prs?owner=${owner}&repo=${repo}`);
-  };
+  }, [owner, repo, navigate]);
 
   return (
     <div className="bg-black text-bg-main">
@@ -48,13 +49,11 @@ const HomePage: React.FC = () => {
           </div>
 
           {/* Search Bar */}
+          
           <div className="flex items-center justify-center gap-2 mt-6">
             <Search
-              owner={owner}
-              repo={repo}
               setOwner={setOwner}
               setRepo={setRepo}
-              onLoad={handleLoad}
               loading={loading}
               input={input}
               setInput={setInput}
