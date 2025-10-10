@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./globals.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AppLayout from "./layout/AppLayout";
-import HomePage from "./pages/HomePage";
-import PRsPage from "./pages/PRsPage";
+import './globals.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AppLayout from './layout/AppLayout';
+import HomePage from './pages/HomePage';
+import PRsPage from './pages/PRsPage';
+import NotFound from './pages/NotFound';
 
 function App() {
   const [token, setToken] = useState<string | null>(null);
@@ -71,6 +72,8 @@ function App() {
             element={<PRsPage user={user} repos={repos} token={token} />}
           />
         </Route>
+
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </Router>
   );

@@ -16,7 +16,6 @@ export default function Tabs({ activeTab, onTabChange }: TabsProps) {
       </button>
       <button
         onClick={() => {
-          console.log('Clicked closed tab!');
           onTabChange('closed');
         }}
         className={`rounded-full py-2 lg:py-3 text-center flex-1 cursor-pointer ${

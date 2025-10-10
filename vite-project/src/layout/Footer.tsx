@@ -3,30 +3,30 @@ import logo from "../assets/logo.png";
 
 const developers = [
   {
-    name: "Jazz",
-    Github: "https://github.com/jazxbx",
+    name: 'Jazz Bullecer',
+    Github: 'https://github.com/jazxbx',
   },
   {
-    name: "Kevin",
-    LinkedIn: "https://www.linkedin.com/in/kevinllanos7",
-    Github: "https://github.com/KevinLlano",
+    name: 'Kevin LLanos',
+    LinkedIn: 'https://www.linkedin.com/in/kevinllanos7',
+    Github: 'https://github.com/KevinLlano',
   },
   {
-    name: "Matthew",
-    LinkedIn: "https://linkedin.com/in/matthew-neie",
-    Github: "https://github.com/MatthewNeie",
+    name: 'Matthew Neie',
+    LinkedIn: 'https://linkedin.com/in/matthew-neie',
+    Github: 'https://github.com/MatthewNeie',
   },
 ];
 
 const scrumMaster = {
-  name: "Thais",
-  LinkedIn: "https://www.linkedin.com/in/thaisaya/",
-  Github: "https://github.com/thaisaya",
+  name: 'Thais Inatomi',
+  LinkedIn: 'https://www.linkedin.com/in/thaisaya/',
+  Github: 'https://github.com/thaisaya',
 };
 
 const productOwner = {
-  name: "Viral",
-  LinkedIn: "https://www.linkedin.com/in/viral-barot-mba/",
+  name: 'Viral Barot',
+  LinkedIn: 'https://www.linkedin.com/in/viral-barot-mba/',
 };
 
 //  className='flex flex-col md:flex-row md:justify-around'
@@ -56,8 +56,8 @@ const Footer: React.FC = () => (
           </h3>
           <ul className="space-y-4 text-sm">
             {developers.map((developer) => (
-              <li className="flex items-center" key={developer.name}>
-                <span className="w-20">{developer.name}</span>
+              <li className='flex items-center' key={developer.name}>
+                <span className='min-w-24 mr-3'>{developer.name}</span>
                 {developer.Github && (
                   <a
                     className="pill hover:pillHover"
@@ -88,10 +88,10 @@ const Footer: React.FC = () => (
           <h3 className="mb-4 text-md text-black capitalize font-medium">
             Scrum Master
           </h3>
-          <ul className="space-y-4 text-sm">
-            <li className="flex">
-              <span className="w-20">{scrumMaster.name}</span>
-              <div className="flex">
+          <ul className='space-y-4 text-sm'>
+            <li className='flex'>
+              <span className='min-w-24 mr-3'>{scrumMaster.name}</span>
+              <div className='flex'>
                 <a
                   href={scrumMaster.LinkedIn}
                   target="_blank"
