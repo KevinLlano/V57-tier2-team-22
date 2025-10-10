@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { fetchMappedPullRequests } from '../utils/GitHubApi';
 import { PRData } from '../types';
+
 import PRDashboard from '../components/Dashboard';
 import SectionHeader from '../components/SectionHeader';
 import Tabs from '../components/Tabs';
 import Search from '../components/Search';
 import Button from '../components/Button';
 import Breadcrumbs from '../components/Breadcrumbs';
+
 import DownloadIcon from '@mui/icons-material/Download';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { useLocation } from 'react-router-dom';
 
 export default function PRsPage() {
   //location gets data from search bar in usenavigate
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  console.log(location.pathname);
 
   //get from params or empty
   const [owner, setOwner] = useState(params.get('owner') || '');
@@ -31,7 +32,10 @@ export default function PRsPage() {
   const loadPRs = async () => {
     if (!owner || !repo) return;
     setLoading(true);
+    // console.log('refreshed');
     try {
+      // TODO: for testing! remove this
+      // await new Promise((resolve) => setTimeout(resolve, 3000));
       const data = await fetchMappedPullRequests(owner, repo);
       setPrs(data);
     } catch (error) {
@@ -186,12 +190,14 @@ export default function PRsPage() {
       )}
 
       {loading && (
-        <div className='mt-20 text-grey text-lg'>Fetching pull requests...</div>
+        <div className='mt-20 text-grey text-lg text-center'>
+          Fetching pull requests...
+        </div>
       )}
 
       {!loading && owner && repo && prs.length === 0 && (
-        <div className='mt-20 text-center text-grey'>
-          No PRs found for{' '}
+        <div className='text-2xl mt-20 text-center text-grey'>
+          No GitHub Repository found for{' '}
           <strong>
             {owner}/{repo}
           </strong>
@@ -234,11 +240,19 @@ export default function PRsPage() {
               </Button>
             </div>
           </div>
-          <PRDashboard
-            prs={filteredPRs}
-            activeTab={activeTab}
-            loading={loading}
-          />
+          <div className='mt-6'>
+            {loading ? (
+              <div className='text-center text-grey text-lg'>
+                Fetching pull requests...
+              </div>
+            ) : (
+              <PRDashboard
+                prs={filteredPRs}
+                activeTab={activeTab}
+                loading={loading}
+              />
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -84,14 +84,14 @@ const HomePage: React.FC = () => {
             }
           />
           <Card
-            icon={'🕵️‍♀️'}
+            icon={'🔍'}
             title={'Clear Visibility'}
             text={
               'Tabs and filters give instant insight into PR status, authors, and reviewers—so you can focus only on what matters.'
             }
           />
           <Card
-            icon={'👩‍💻'}
+            icon={'💡'}
             title={'Smarter Decisions'}
             text={
               'Export PR data to CSV/JSON for reporting, analytics, or sharing outside GitHub.'
