@@ -43,6 +43,14 @@ const PRDashboard: React.FC<DashboardProps> = ({ prs, loading, activeTab }) => {
     );
   };
 
+  const renderClosedActionBadge = (lastActionDate: string) => {
+    return (
+      <span className="inline-block px-2 py-1 text-xs font-semibold text-white bg-gray-600 rounded-full">
+        {formatDate(lastActionDate)}
+      </span>
+    );
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col items-center bg-[#f5f5f4] p-8">
@@ -134,7 +142,7 @@ const PRDashboard: React.FC<DashboardProps> = ({ prs, loading, activeTab }) => {
                 </th>
               ) : (
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date Closed
+                  Closed Date
                 </th>
               )}
               {activeTab === "open" ? (
@@ -223,9 +231,15 @@ const PRDashboard: React.FC<DashboardProps> = ({ prs, loading, activeTab }) => {
                     )}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {renderLastActionBadge(pr.lastActionDate)}
-                </td>
+                {activeTab === "open" ? (
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {renderLastActionBadge(pr.lastActionDate)}
+                  </td>
+                ) : (
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {renderClosedActionBadge(pr.lastActionDate)}
+                  </td>
+                )}
                 {activeTab === "open" ? (
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span

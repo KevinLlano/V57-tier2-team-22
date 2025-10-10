@@ -21,6 +21,7 @@ export default function PRsPage({ user, repos, token }) {
   //get from params or empty
   const [owner, setOwner] = useState(params.get("owner") || "");
   const [repo, setRepo] = useState(params.get("repo") || "");
+  const [input, setInput] = useState<string>("");
 
   // PR data and filters (with upstream's open/closed functionality)
   const [prs, setPrs] = useState<PRData[]>([]);
@@ -163,7 +164,15 @@ export default function PRsPage({ user, repos, token }) {
 
   return (
     <div className="min-h-full mt-16 flex flex-col gap-4 p-3 md:p-8 lg:px-30 lg:py-11 overflow-y-auto">
-      <OAuth user={user} repos={repos} token={token} />
+      <OAuth
+        user={user}
+        repos={repos}
+        token={token}
+        repo={repo}
+        setRepo={setRepo}
+        input={input}
+        setInput={setInput}
+      />
       {/* Search and action buttons */}
       <div className="m-auto">
         <Search
@@ -173,6 +182,8 @@ export default function PRsPage({ user, repos, token }) {
           setRepo={setRepo}
           onLoad={loadPRs}
           loading={loading}
+          input={input}
+          setInput={setInput}
         />
       </div>
 

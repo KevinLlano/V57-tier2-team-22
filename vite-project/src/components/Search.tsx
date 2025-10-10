@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import CircularProgress from '@mui/material/CircularProgress';
+import React, { useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface SearchProps {
   owner: string;
@@ -9,6 +9,8 @@ interface SearchProps {
   setRepo: (value: string) => void;
   onLoad: () => void;
   loading: boolean;
+  input: string;
+  setInput: (value: string) => void;
 }
 
 // TODO: add x to clear search
@@ -18,10 +20,10 @@ const Search: React.FC<SearchProps> = ({
   setRepo,
   onLoad,
   loading,
+  input,
+  setInput,
 }) => {
-  const [input, setInput] = useState('');
-
-  const isValid = input.includes('/') && input.split('/').length === 2;
+  const isValid = input.includes("/") && input.split("/").length === 2;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -29,18 +31,18 @@ const Search: React.FC<SearchProps> = ({
 
   const handleSearch = () => {
     if (isValid) {
-      const [owner, repo] = input.split('/').map((part) => part.trim());
+      const [owner, repo] = input.split("/").map((part) => part.trim());
       setOwner(owner);
       setRepo(repo);
       onLoad();
     } else {
       // change later
-      alert('Please enter in the format: owner/repo');
+      alert("Please enter in the format: owner/repo");
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !loading) {
+    if (e.key === "Enter" && !loading) {
       handleSearch();
     }
   };
@@ -51,22 +53,22 @@ const Search: React.FC<SearchProps> = ({
     flex justify-center md:justify-start gap-4 transition-all duration-200 ring-1 mb-5 md:mb-7 lg:mb-14
     ${
       input.length === 0
-        ? 'ring-grey border-grey'
+        ? "ring-grey border-grey"
         : isValid
-        ? 'ring-green border-green'
-        : 'ring-error border-error'
+        ? "ring-green border-green"
+        : "ring-error border-error"
     }`}
     >
       {loading ? (
-        <CircularProgress size={20} className='text-grey' />
+        <CircularProgress size={20} className="text-grey" />
       ) : (
         <SearchIcon
           className={`${
             isValid
-              ? 'text-green'
+              ? "text-green"
               : input.length > 0
-              ? 'text-error'
-              : 'text-grey'
+              ? "text-error"
+              : "text-grey"
           }`}
         />
       )}
@@ -74,9 +76,9 @@ const Search: React.FC<SearchProps> = ({
         value={input}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder='Search GitHub: owner/repo'
+        placeholder="Search GitHub: owner/repo"
         disabled={loading}
-        className='text-sm md:text-base flex-1 outline-none text-grey placeholder-grey'
+        className="text-sm md:text-base flex-1 outline-none text-grey placeholder-grey"
       />
     </div>
   );

@@ -46,7 +46,9 @@ app.get("/auth/github/callback", async (req, res) => {
     );
 
     const accessToken = tokenRes.data.access_token;
-    res.redirect(`https://prtrackerr.netlify.app/prs?token=${accessToken}`);
+    res.redirect(
+      `https://v57-tier2-team-22.vercel.app/prs?token=${accessToken}`
+    );
   } catch (err) {
     console.error(err);
     res.status(500).send("Authentication failed");

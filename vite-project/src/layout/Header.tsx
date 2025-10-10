@@ -55,7 +55,7 @@ export const Header: React.FC = ({ user, token, onLogout }) => {
       <div className="flex text-center items-center justify-center">
         {!token ? (
           <button
-            className="bg-green text-white w-36 p-2 rounded-2xl cursor-pointer mr-10"
+            className="bg-green text-white rounded-2xl text-sm cursor-pointer mr-4 w-28 p-2 sm:text-md sm:mr-6 sm:w-36 sm:p-2 lg:mr-10"
             onClick={handleLogin}
           >
             GitHub Login
@@ -64,15 +64,15 @@ export const Header: React.FC = ({ user, token, onLogout }) => {
           <div className="mb-2"></div>
         )}
         {user && (
-          <div className="flex text-center items-center justify-center mr-10">
+          <div className="flex text-center items-center justify-center mr-4 lg:mr-10">
             <img
               src={user.avatar_url}
               alt="Profile"
-              className="h-16 rounded-full"
+              className="h-10 rounded-full sm:h-12 md:h-14 lg:h-16"
             />
-            <h2 className="ml-2">{user.name}</h2>
+            <h2 className="ml-2 text-xs sm:text-sm md:text-md">{user.name}</h2>
             <button
-              className="bg-green text-white w-24 p-2 rounded-2xl cursor-pointer ml-10"
+              className="bg-green text-white w-18 p-2 rounded-2xl cursor-pointer text-sm ml-4 sm:text-md sm:w-24 sm:ml-6 md:ml-8 lg:ml-10"
               onClick={onLogout}
             >
               Logout
